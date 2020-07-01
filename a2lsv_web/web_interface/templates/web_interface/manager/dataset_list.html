@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Datasets</li>
+    </ol>
+  </nav>
+    {% if user.is_authenticated %}
+      {% if user.is_manager %}
+          <a href="{% url 'labeler_signup' %}" class="btn btn-primary mb-3" role="button">New Labeler</a>
+          <a href="{% url 'manager_signup' %}" class="btn btn-primary mb-3" role="button">New Manager</a>
+          <a href="{% url 'manager:keyword_add' %}" class="btn btn-primary mb-3" role="button">Start audio fetcher</a>
+      {% endif %}
+    {% endif %}
+  <h2 class="mb-3">Datasets</h2>
+    {% if user.is_authenticated %}
+      {% if user.is_manager %}
+      <a href="{% url 'manager:dataset_add' %}" class="btn btn-primary mb-3" role="button">New Dataset</a>
+      {% endif %}
+    {% endif %}
+  <div class="card">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>Dataset Name</th>
+          <th>Lang</th>
+          <th># of Downloaded Audio</th>
+          <th># of Diarized Audio</th>
+          <th># of Labeled Audio</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dataset in datasets %}
+          <tr>
+            <td class="align-middle">{{ dataset.name }}</td>
+            <td class="align-middle">{{ dataset.lang }}</td>
+            <td class="align-middle">{{ dataset.countOfDownloadeds }}</td>
+            <td class="align-middle">{{ dataset.countOfDiarized }}</td>
+            <td class="align-middle">{{ dataset.countOfLabeleds }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td class="bg-light text-center font-italic" colspan="5">There is no dataset yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

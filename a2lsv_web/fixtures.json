@@ -1,0 +1,1 @@
+[{"model": "web_interface.languages", "pk": 1, "fields": {"name": "tr"}}, {"model": "web_interface.languages", "pk": 2, "fields": {"name": "lv"}}]

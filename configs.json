@@ -1,0 +1,5 @@
+{
+	"kafkaPort": 9092,
+	"mongoDbAddress" : "127.0.0.1:27017",
+	"googleAPIDeveloperKey" : "your_developer_key_here"	
+}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Audios</li>
+    </ol>
+  </nav>
+  <h2 class="mb-3">Audios</h2>
+  <div class="card">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>Channel Title</th>
+          <th>Audio Title</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for audio in audios %}
+          <tr>
+            <td class="align-middle">{{ audio.channelTitles }}</td>
+            <td class="align-middle">{{ audio.titles }}</td>
+            <td class="align-middle">
+                <a href="{% url 'labeler:labelAudio' %}?videoId={{ audio.videoId }}&dbName={{ audio.dbName }}" class="btn btn-primary mb-3" role="button">Label this</a>
+            </td>
+
+          </tr>
+        {% empty %}
+          <tr>
+            <td class="bg-light text-center font-italic" colspan="5">There is no diarized audio yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Speaker Duplicate Control</li>
+    </ol>
+  </nav>
+  <h2 class="mb-3">Speaker Duplicate Control</h2>
+
+      <!-- main wavesurfer.js lib -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/wavesurfer.min.js"></script>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.regions.min.js"></script>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+      <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/5ed507ef8aa53d8ecfea96d96bc7214cd2476fd2/FileSaver.min.js"></script>
+      <!-- wavesurfer.js timeline -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.timeline.min.js"></script>
+
+
+    {% for similarSpeaker in similarSpeakers %}
+    <div>
+      <b class='AudioName{{ similarSpeaker.sampleVideoId }}' id="AudioName" style="text-align:center"></b>
+      <div id="waveform{{ similarSpeaker.sampleVideoId }}" style="width: 100%;"></div>
+      <div id="waveform-timeline{{ similarSpeaker.sampleVideoId }}"></div>
+        <button class="btn btn-success btn-lg" style="margin:5px;width:120px;height:50px" onclick="wavesurfersDict['{{ similarSpeaker.sampleVideoId }}'].playPause()">
+            Play/Pause
+        </button>
+
+      <b class='AudioName{{ similarSpeaker.compareVideoId }}' id="AudioName" style="text-align:center"></b>
+      <div id="waveform{{ similarSpeaker.compareVideoId }}" style="width: 100%;"></div>
+      <div id="waveform-timeline{{ similarSpeaker.compareVideoId }}"></div>
+        <button class="btn btn-success btn-lg" style="margin:5px;width:120px;height:50px" onclick="wavesurfersDict['{{ similarSpeaker.compareVideoId }}'].playPause()">
+            Play/Pause
+        </button>
+
+      <p hidden id="videoId" value={{ similarSpeaker.sampleVideoId }}></p>
+      <p hidden id="videoId" value={{ similarSpeaker.compareVideoId }}></p>
+      <p hidden id="postData" value={{ postData }}></p>
+
+      <div style="text-align: left">
+       <div style="float:left;width:50%">
+          <p style="margin-left:1%"><strong>Playlist</strong></p>
+          <div class="playlist{{ similarSpeaker.sampleVideoId }}" id="playlist" style="margin:5px;width:98%;border-style:solid;border-width;border-radius:5px;padding-left:0.5%;overflow:scroll;height:250px;">
+            {% for audio in similarSpeaker.sampleAudios %}
+            	<p class="audio" videoid="{{ similarSpeaker.sampleVideoId }}"  style="margin-bottom:0" link="/static/datasets/{{ audio.dbName }}/final_dataset/{{ similarSpeaker.speakerId }}/{{ audio.videoId }}/{{ audio.name }}.wav">{{ audio.name }}.wav</p>
+            {% endfor %}
+    	  </div>
+        </div>
+      </div>
+
+
+      <div style="text-align: left">
+       <div style="float:right;width:50%">
+          <p style="margin-left:1%"><strong>Playlist</strong></p>
+          <div class="playlist{{ similarSpeaker.compareVideoId }}" id="playlist" style="margin:5px;width:98%;border-style:solid;border-width;border-radius:5px;padding-left:0.5%;overflow:scroll;height:250px;">
+            {% for audio in similarSpeaker.compareAudios %}
+            	<p class="audio" videoid="{{ similarSpeaker.compareVideoId }}" style="margin-bottom:0" link="/static/datasets/{{ audio.dbName }}/{{ audio.videoId }}/{{ audio.name }}.wav">{{ audio.name }}.wav</p>
+            {% endfor %}
+    	  </div>
+        </div>
+      </div>
+
+        <div id='buttons' style="clear:both;float:left;width:46%">
+         <button id="confirm-btn" class="btn btn-error btn-md" style="float:left;margin:5px;width:20s0px;height:30px;font-weight:bold;padding:0;padding-left:5px;padding-right:5px" onclick="confirm(false)">
+            Different Speaker
+          </button>
+         <button id="confirm-btn" class="btn btn-info btn-md" style="float:left;margin:5px;width:20s0px;height:30px;font-weight:bold;padding:0;padding-left:5px;padding-right:5px" onclick="confirm(true)">
+            Same Speaker
+          </button>
+        </div>
+
+    </div>
+    {% endfor %}
+
+      <form method="post" novalidate hidden>
+        {% csrf_token %}
+      </form>
+     {% load static %}
+      <script  src="{% static 'js/solve_speaker_duplicate.js' %}"></script>
+      <!-- <script src="js/jqueryScripts.js"></script> -->
+   </body>
+
+{% endblock %}

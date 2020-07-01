@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Audio Labeling</li>
+    </ol>
+  </nav>
+  <h2 class="mb-3">Audio Labeling</h2>
+      
+
+    <div style="margin-left:1%;float:left">
+        <p><strong><i>Status:</i></strong>
+    </div>
+
+    <div style="margin-left:1%;float:left">
+      <p id="status">None</p>
+    </div>
+
+
+      <br>
+      <br>
+
+
+      <b id="AudioName" style="text-align:center"></b>
+      <!-- main wavesurfer.js lib -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/wavesurfer.min.js"></script>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.regions.min.js"></script>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+      <script src="https://cdn.rawgit.com/eligrey/FileSaver.js/5ed507ef8aa53d8ecfea96d96bc7214cd2476fd2/FileSaver.min.js"></script>
+      <!-- wavesurfer.js timeline -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.timeline.min.js"></script>
+
+      <div id="waveform" style="width: 100%;"></div>
+      <div id="waveform-timeline"></div>
+
+      <div style="text-align: left">
+
+        <br>
+
+
+        <div id='buttons' style="clear:both;float:left;width:46%">
+          <p style="margin-left:1%"><strong>Label Controls</strong></p>
+
+          <button class="btn btn-success btn-lg" style="margin:5px;width:120px;height:50px" onclick="wavesurfer.playPause()">
+              Play/Pause
+          </button>
+
+        {% for i in speakerCount %}
+          <button id="speakerButton" class="btn btn-info btn-md" style="margin:5px;width:100px;height:35px; "  onclick="labelSpeaker({{ i }})">
+              Speaker #{{ i }}
+          </button>
+        {% endfor %}
+        </div>
+
+        <div style="clear:both;float:left;width:46%">
+          <button class="btn btn-warning btn-md" style="margin:5px;width:100px;height:35px;padding:0;font-weight:bold"  onclick="addSpeaker()">
+             Add Speaker
+          </button>
+
+          <button class="btn btn-default btn-md" style="margin:5px;width:100px;height:35px;padding:0;font-weight:bold"  onclick="clearLabels()">
+             Clear Labels
+          </button>
+
+        </div>
+          <br></br>
+        <p hidden id="dbName" value="{{ dbName }}"></p>
+        <p hidden id="videoId" value="{{ videoId }}"></p>
+
+
+        <div style="float:right;width:52%">
+          <p style="margin-left:1%"><strong>Playlist</strong></p>
+          <div id="playlist" style="margin:5px;width:98%;border-style:solid;border-width;border-radius:5px;padding-left:0.5%;overflow:scroll;height:300px;">
+
+        {% for audio in audios %}
+        	<p class="audio" style="margin-bottom:0" preLabel={{ audio.preLabel }} link="/static/datasets/{{ audio.dbName }}/{{ audio.videoId }}/{{ audio.name }}.wav">{{ audio.name }}.wav</p>
+        {% endfor %}
+
+	  </div>
+        </div>
+
+        <div style="float:left;width:46%">
+          <p style="margin-left:1%"><strong>Speed Controls</strong></p>
+
+          <div>
+            <button class="btn btn-primary btn-md" style="margin:5px;width:100px;height:35px" onclick="setSpeed_1_5x()">
+                Speed 1.5x
+            </button>
+
+            <button class="btn btn-primary btn-md" style="margin:5px;width:100px;height:35px" onclick="setSpeed_2x()">
+                Speed 2x
+            </button>
+
+            <button class="btn btn-primary btn-md" style="margin:5px;width:100px;height:35px" onclick="setSpeed_3x()">
+                Speed 3x
+            </button>
+          </div>
+
+        </div>
+
+
+        <div style="float:left;width:30%">
+
+          <br></br>
+          <button id="next-btn" class="btn btn-default btn-md" style="float:left;margin:5px;width:20s0px;height:30px;font-weight:bold;padding:0;padding-left:5px;padding-right:5px" onclick="loadPrevFile()">
+            Load previous Audio File
+          </button>
+
+          <button id="next-btn" class="btn btn-default btn-md" style="float:left;margin:5px;width:20s0px;height:30px;font-weight:bold;padding:0;padding-left:5px;padding-right:5px" onclick="loadNextFile()">
+            Load next Audio File
+          </button>
+
+         <button id="confirm-btn" class="btn btn-default btn-md" style="float:left;margin:5px;width:20s0px;height:30px;font-weight:bold;padding:0;padding-left:5px;padding-right:5px" onclick="confirm()">
+            Confirm Labels
+          </button>
+        </div>
+      <form method="post" novalidate hidden>
+        {% csrf_token %}
+      </form>
+
+      </div>
+     {% load static %}
+      <script  src="{% static 'js/index.js' %}"></script>
+      <!-- <script src="js/jqueryScripts.js"></script> -->
+   </body>
+
+{% endblock %}
