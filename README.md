@@ -91,4 +91,4 @@ python speakerDiarization.py
 You can find final dataset files in “a2lsv_web/static/datasets/(dataset_name)/final_dataset” directory. Folder hierarchy is like speaker id => youtube video id => audio file.
 
 ## Documents
-You can find Installation Guide,  Software Design Document and  User Guide in unders docs folder.
+You can download [Installation Guide](https://github.com/aliagdeniz/a2lsv/raw/master/docs/Installation%20Guide.pdf), [Software Design Document](https://github.com/aliagdeniz/a2lsv/raw/master/docs/Software%20Design%20Document.pdf) and  [User Guide](https://github.com/aliagdeniz/a2lsv/raw/master/docs/User%20Guide.pdf).
